@@ -1,26 +1,35 @@
 import 'package:flutter/material.dart';
 
-import '../../models/Product.dart';
 import 'components/body.dart';
 import 'components/custom_app_bar.dart';
+class DetailsScreen extends StatefulWidget {
+   static String routeName = "/details";
+   DetailsScreen({Key key}):super(key: key);
+  @override
+  _DetailsScreenState createState() => _DetailsScreenState();
+}
 
-class DetailsScreen extends StatelessWidget {
-  static String routeName = "/details";
+class _DetailsScreenState extends State<DetailsScreen> {
+ void initState(){
+      super.initState();
+      print("Detail Page Done");
+    }
 
   @override
   Widget build(BuildContext context) {
-    final ProductDetailsArguments agrs =
-        ModalRoute.of(context).settings.arguments;
+    final agrs = ModalRoute.of(context).settings.arguments;
+  
     return Scaffold(
       backgroundColor: Color(0xFFF5F6F9),
-      appBar: CustomAppBar(rating: agrs.product.rating),
-      body: Body(product: agrs.product),
+      appBar: CustomAppBar(rating: 4.4),
+      // body: Body(product: agrs), 
+      body: Text("Detail Page"),
     );
   }
 }
 
-class ProductDetailsArguments {
-  final Product product;
+// class ProductDetailsArguments {
+//   final Product product;
 
-  ProductDetailsArguments({@required this.product});
-}
+//   ProductDetailsArguments({@required this.product});
+// }

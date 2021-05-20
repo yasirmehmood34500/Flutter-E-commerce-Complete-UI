@@ -1,10 +1,14 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shop_app/constants.dart';
-import 'package:shop_app/screens/sign_in/sign_in_screen.dart';
+// import 'package:shop_app/screens/sign_in/sign_in_screen.dart';
+import '../../home/home_screen.dart';
 import 'package:shop_app/size_config.dart';
+import 'package:http/http.dart' as http;
+import '../../../api/api_conf.dart' as ApiBase;
 
 // This is the best practice
-import '../components/splash_content.dart';
+import '../components/splash_content_n.dart';
 import '../../../components/default_button.dart';
 
 class Body extends StatefulWidget {
@@ -13,22 +17,46 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
+  var splashs;
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  fetchData() async {
+    // var url ="http://192.168.18.58:8080/Git-PHP-Project/PHP-HTTP_AUTHORIZATION/Basic_Auth/index.php";
+    // var res = await http.get(url, headers: {"authorization": "Basic eWFzaXI6MTIz"},);
+    // var splashs = jsonDecode(res.body);
+    var url = ApiBase.baseURL + "app_splash_screen.php";
+    // print(url);
+    var res = await http.get(
+      url,
+      headers: {"authorization": "Basic eWFzaXI6MTIz"},
+    );
+    splashs = jsonDecode(res.body);
+    // print(splashs);
+    setState(() {});
+  }
+
   int currentPage = 0;
-  List<Map<String, String>> splashData = [
-    {
-      "text": "Welcome to Tokoto, Let’s shop!",
-      "image": "assets/images/splash_1.png"
-    },
-    {
-      "text":
-          "We help people conect with store \naround United State of America",
-      "image": "assets/images/splash_2.png"
-    },
-    {
-      "text": "We show the easy way to shop. \nJust stay at home with us",
-      "image": "assets/images/splash_3.png"
-    },
-  ];
+  // List<Map<String, String>> splashs = [
+  //   {
+  //     "header": "Flatros",
+  //     "text": "Welcome to Flatros, Let’s shop!",
+  //     "image_name": "assets/images/splash_1.png"
+  //   },
+  //   {
+  //     "header": "Shopping",
+  //     "text":
+  //         "We help people conect with store \naround United State of America",
+  //     "image_name": "assets/images/splash_2.png"
+  //   },
+  //   {
+  //     "header": "Multi Category",
+  //     "text": "FInal Screen",
+  //     "image_name": "assets/images/splash_3.png"
+  //   },
+  // ];
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -44,10 +72,11 @@ class _BodyState extends State<Body> {
                     currentPage = value;
                   });
                 },
-                itemCount: splashData.length,
-                itemBuilder: (context, index) => SplashContent(
-                  image: splashData[index]["image"],
-                  text: splashData[index]['text'],
+                itemCount: splashs.length,
+                itemBuilder: (BuildContext context, int index) => SplashContent(
+                  header: splashs[index]["header"],
+                  image: splashs[index]["image_name"],
+                  text: splashs[index]['text'],
                 ),
               ),
             ),
@@ -62,7 +91,7 @@ class _BodyState extends State<Body> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: List.generate(
-                        splashData.length,
+                        splashs.length,
                         (index) => buildDot(index: index),
                       ),
                     ),
@@ -70,7 +99,7 @@ class _BodyState extends State<Body> {
                     DefaultButton(
                       text: "Continue",
                       press: () {
-                        Navigator.pushNamed(context, SignInScreen.routeName);
+                        Navigator.pushNamed(context, HomeScreen.routeName);
                       },
                     ),
                     Spacer(),

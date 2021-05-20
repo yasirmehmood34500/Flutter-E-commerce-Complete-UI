@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import '../../../api/api_conf.dart' as ApiBase;
 import '../../../constants.dart';
 import '../../../size_config.dart';
 
@@ -30,22 +30,20 @@ class SplashContent extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
         Spacer(flex: 2),
-        // Container(
-        //   height: 200,
-        //   width: 200,
-        //   decoration: BoxDecoration(
-        //       borderRadius: BorderRadius.all(Radius.circular(50)),
-        //       image: DecorationImage(
-        //           image: NetworkImage(
-        //               "https://shostings.com/FLATROS_API_PHP/mobile_api/upload/splash_screen/" +
-        //                   image),
-        //           fit: BoxFit.fill)),
-        // ),
-        Image.asset(
-          image,
-          height: getProportionateScreenHeight(265),
-          width: getProportionateScreenWidth(235),
+        Container(
+          height: 200,
+          width: 200,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(50)),
+              image: DecorationImage(
+                  image: NetworkImage(ApiBase.splashURL + image),
+                  fit: BoxFit.fill)),
         ),
+        // Image.asset(
+        //   image,
+        //   height: getProportionateScreenHeight(265),
+        //   width: getProportionateScreenWidth(235),
+        // ),
       ],
     );
   }

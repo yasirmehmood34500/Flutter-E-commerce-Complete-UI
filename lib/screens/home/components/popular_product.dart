@@ -1,40 +1,49 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:shop_app/components/product_card.dart';
-import 'package:shop_app/models/Product.dart';
-
+import 'package:http/http.dart' as http;
+import './product_list.dart';
+import '../../../api/api_conf.dart' as ApiBase;
 import '../../../size_config.dart';
-import 'section_title.dart';
+import './section_title.dart';
 
-class PopularProducts extends StatelessWidget {
+class PopularProducts extends StatefulWidget {
+  @override
+  _PopularProductsState createState() => _PopularProductsState();
+}
+
+class _PopularProductsState extends State<PopularProducts> {
+  var url = ApiBase.baseURL + "menus.php";
+  var menus;
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  fetchData() async {
+    var res = await http.get(url);
+    menus = jsonDecode(res.body)["menu"];
+    // print(menus);
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
-        Padding(
-          padding:
-              EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
-          child: SectionTitle(title: "Popular Products", press: () {}),
-        ),
-        SizedBox(height: getProportionateScreenWidth(20)),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              ...List.generate(
-                demoProducts.length,
-                (index) {
-                  if (demoProducts[index].isPopular)
-                    return ProductCard(product: demoProducts[index]);
-
-                  return SizedBox
-                      .shrink(); // here by default width and height is 0
-                },
-              ),
-              SizedBox(width: getProportionateScreenWidth(20)),
-            ],
+      children: List.generate(menus.length, (index) {
+        return Column(children: [
+          Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: getProportionateScreenWidth(20),
+                vertical: getProportionateScreenHeight(0)),
+            child: SectionTitle(title: menus[index]["name"], press: () {}),
           ),
-        )
-      ],
+          SizedBox(height: getProportionateScreenWidth(20)),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: ProductList(menuid: menus[index]["id"]),
+          ),
+        ]);
+      }),
     );
   }
 }
